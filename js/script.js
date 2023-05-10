@@ -1,3 +1,4 @@
+/*
 Arrays
 Comentar las partes
 Dinamico
@@ -17,3 +18,6 @@ async function getApiValue{
 }
 
 getApiValue()
+*/
+
+
