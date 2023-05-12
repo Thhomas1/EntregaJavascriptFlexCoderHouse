@@ -49,6 +49,43 @@ aside {
     font-size: 1.3rem;
 }
 
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.boton-menu {
+    background-color: transparent;
+    border: 0;
+    color: var(--clr-white);
+    cursor: pointer;
+    display: flex;
+    gap: 1rem;
+    font-weight: 600;
+}
+.boton-menu.active{
+
+
+    /* *Seguir aca 41:15 */
+}
+
+
+
+
+
+
+
+/* !  Esto de aca cambiar luego que cambiemos los iconos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+
+.boton-menu > i.bi-hand-index-thumb-fill
+.boton-menu>i.bi-hand-index-thumb{
+    transform: rotateZ(90deg);
+}
+
 .texto-footer {
     color: var(--clr-main-light);
     font-size: 0.85rem;
@@ -98,7 +135,18 @@ main {
     border: 0;
     background-color: var(--clr-white);
     color: var(--clr-main);
-    padding: 0;
+    padding: 0.4rem;
+    text-transform: uppercase;
+    border-radius: 2rem;
+    cursor: pointer;
+    border: 2px solid var(--clr-white);
+    transition: background-color .2s, color .2s;
 }
+
+.producto-agregar:hover{
+    background-color: var(--clr-main);
+    color: var(--clr-white);
+}
+
 
 
