@@ -213,6 +213,7 @@ const contenedorProductos = document.querySelector("#contenedor-productos");
 const botonesCategorias = document.querySelectorAll(".boton-categorias");
 const tituloPrincipal = document.querySelector("#titulo-principal");
 let botonesAgregar = document.querySelectorAll(".producto-agregar");
+const numerito = document.querySelector("#numerito");
 
 // Creamos la funcion para que carguen dichos productos y aparezcan en el inicio
 function cargarProductos(productosElegidos) {
@@ -280,7 +281,7 @@ botonesCategorias.forEach(boton => {
 
 function actualizarBotonesAgregar() {
      botonesAgregar = document.querySelectorAll(".producto-agregar");
-    botonesAgregar.forEach(boton => {
+        botonesAgregar.forEach(boton => {
         boton.addEventListener("click", agregarAlCarrito);
     });
 }
@@ -292,7 +293,18 @@ declaramos y utilizamos el metodo find para que nos devuelve nuevamente el produ
 basicamente agregamos un producto y lo "convertimos" en un array
 */
 
-const productosEnCarrito = [];
+let productosEnCarrito;
+
+// Aca lo que hicimos es declarar la constante para el Local Storage por medio de un if declarando que el carrito quede en vacio
+
+const productosEnCarritoLS = JSON.parse(localStorage.getItem("productos-en-carrito"));
+if (productosEnCarritoLS) {
+     productosEnCarrito = productosEnCarritoLS;
+     actualizarNumerito(); // SI hay productos en carrito que aparezca actualizado el numerito
+
+} else {
+    productosEnCarrito = [];
+}
 
 function agregarAlCarrito(e) {
     const idBoton = e.currentTarget.id;
@@ -304,11 +316,24 @@ function agregarAlCarrito(e) {
     */
 
     if (productosEnCarrito.some(producto => producto.id === idBoton)) {
-        
+       const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
+       productosEnCarrito[index].cantidad++; // esto lo hacemos para ir sumando la cantidad
     } else {
         productoAgregado.cantidad = 1;
         productosEnCarrito.push(productoAgregado);
     }
 
+    actualizarNumerito();
 
+    // llamamos al localstorage
+    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+
+}
+
+// declaramos la funcion para hacer funcional la suma del carrito
+// Utilizamos un reduce para agarrar dicho array y declararlo a un solo valor, en este caso lo usamos para actualizar el numerito y reducir las cantidades
+
+function actualizarNumerito() {
+    let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0);
+    numerito.innerText = nuevoNumerito;
 }
