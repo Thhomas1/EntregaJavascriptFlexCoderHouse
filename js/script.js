@@ -5,7 +5,7 @@ Dinamico
 Try Catch
 Uso de Dom
 JSON si o si para remplazar lo que seria lo de las apis
-
+SweetAlert u otra libreria mas linda
 
 
 async function getApiValue{
@@ -208,9 +208,11 @@ const productos = [
 ];
 
 
-// creamos las constantes para traer las id y las clases sin necesidad que generar tanto codigo en la estructura(HTML)
+// declaramos nuestras constantes para traer las id y las clases sin necesidad que generar tanto codigo en la estructura(HTML)
 const contenedorProductos = document.querySelector("#contenedor-productos");
 const botonesCategorias = document.querySelectorAll(".boton-categorias");
+const tituloPrincipal = document.querySelector("#titulo-principal");
+let botonesAgregar = document.querySelectorAll(".producto-agregar");
 
 // Creamos la funcion para que carguen dichos productos y aparezcan en el inicio
 function cargarProductos(productosElegidos) {
@@ -233,6 +235,7 @@ function cargarProductos(productosElegidos) {
         // hacemos un append de este mismo div para luego llamarlo
         contenedorProductos.append(div);
     })
+    actualizarBotonesAgregar();
 }
 
 // la llamamos...
@@ -253,16 +256,59 @@ botonesCategorias.forEach(boton => {
 
         // creamos el if para evitar el error de la carga de productos y formalizar nuestro metodo 
         // utilizamos el metodo filter para filtrar las distintas prendas y a traves del currentTarget traemos el id del html
+        // utilizamos el metodo find   para que recorra cada producto del array y que traiga el primer producto 
 
         if(e.currentTarget.id != "todos") {
 
+            const productoCategoria = productos.find(producto => producto.categoria.id === e.currentTarget.id);
+            tituloPrincipal.innerText = productoCategoria.categoria.nombre;
             const productosBoton = productos.filter(producto => producto.categoria.id === e.currentTarget.id)
             cargarProductos(productosBoton);
             
         } else {
-            // array principal que tiene todos los productos 
+            // array principal que tiene todos los productos
+            tituloPrincipal.innerText = "Todos los productos";
             cargarProductos(productos);
 
         }
     })
-})
+});
+
+// como sabemos que el let declarado de botones agregar recien esta mencionado en nuestra linea 231 
+// creamos esta funcion para cuando se carguen productos nuevos tambien se actualicen los botones
+// Declaramos la funcion y utilizamos el forEach para agregar al carrito
+
+function actualizarBotonesAgregar() {
+     botonesAgregar = document.querySelectorAll(".producto-agregar");
+    botonesAgregar.forEach(boton => {
+        boton.addEventListener("click", agregarAlCarrito);
+    });
+}
+
+
+/* 
+declaramos y utilizamos el metodo find para que nos devuelve nuevamente el producto 
+ y por medio del metodo push cada vez que vayamos sumando productos al carrito aparece como arrays,
+basicamente agregamos un producto y lo "convertimos" en un array
+*/
+
+const productosEnCarrito = [];
+
+function agregarAlCarrito(e) {
+    const idBoton = e.currentTarget.id;
+    const productoAgregado = productos.find(producto => producto.id === idBoton);
+
+    /* en este caso utilizamos el metodo some para fijarse si hay algo que coincida y devuelva a modo booleano (True o False)
+        esto lo hacemos para que en el carrito no se repita el mismo array, es decir el mismo producto
+        creandole un if subiendole la cantidad de dicho array sin necesidad que se repita 
+    */
+
+    if (productosEnCarrito.some(producto => producto.id === idBoton)) {
+        
+    } else {
+        productoAgregado.cantidad = 1;
+        productosEnCarrito.push(productoAgregado);
+    }
+
+
+}
