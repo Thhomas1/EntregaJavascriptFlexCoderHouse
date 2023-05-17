@@ -110,6 +110,25 @@ function eliminarDelCarrito(){
 botonVaciar.addEventListener("click", vaciarCarrito);
 function vaciarCarrito() {
 
+    // Utilizamos el sweet alert Libreria
+
+    Swal.fire({
+        title: '¿Estás seguro?',
+        icon: 'question',
+        html: `Se van a borrar ${productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0)} productos.`,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            productosEnCarrito.length = 0;
+            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+            cargarProductosCarrito();
+        }
+      })
+
+      
     productosEnCarrito.length = 0;
     localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
     cargarProductosCarrito();
@@ -127,5 +146,16 @@ Y hacemos el boton nuevamente como hicimos arriba
 function actualizarTotal() {
     const totalCalculado = productosEnCarrito.reduce((acc, producto) => + (producto.precio * producto.cantidad), 0);
     total.innerText = `$${totalCalculado}`;
+
+}
+function comprarCarrito() {
+
+    productosEnCarrito.length = 0;
+    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+    
+    contenedorCarritoVacio.classList.add("disabled");
+    contenedorCarritoProductos.classList.add("disabled");
+    contenedorCarritoAcciones.classList.add("disabled");
+    contenedorCarritoComprado.classList.remove("disabled");
 
 }
