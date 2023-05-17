@@ -11,6 +11,9 @@ const contenedorCarritoComprando = document.querySelector("#carrito-comprado");
 let botonesEliminar = document.querySelectorAll(".carrito-producto-eliminar"); 
 // este let lo usamos para eliminar y agarramos el querySelectorAll para justamente poder eliminar ALL
 const botonVaciar = document.querySelector("#carrito-acciones-vaciar");
+const contenedorTotal = document.querySelector("#total");
+const botonComprar = document.querySelector("#carrito-acciones-comprar");
+
 
 
 function cargarProductosCarrito() {
@@ -58,6 +61,7 @@ if (productosEnCarrito && productosEnCarrito.length > 0) {
     })
 
     actualizarBotonesEliminar();
+    actualizarTotal();
 
 }else{
     // esto lo hacemos ya que queremos tambien que si borramos productos que tambien esto pase 
@@ -104,10 +108,24 @@ function eliminarDelCarrito(){
 // le agregamos un addEventListener para llamar a la funcion de vaciar 
 
 botonVaciar.addEventListener("click", vaciarCarrito);
-
 function vaciarCarrito() {
 
     productosEnCarrito.length = 0;
     localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
     cargarProductosCarrito();
+}
+
+
+/*  
+ahora utilizamos la constante del principio
+para crear una funcion para actualizar nuestros totales del carrito
+utilizamos el acumulador + el producto.precio * producto.cantidad
+para justamente la suma de ellos 
+Y hacemos el boton nuevamente como hicimos arriba
+*/
+
+function actualizarTotal() {
+    const totalCalculado = productosEnCarrito.reduce((acc, producto) => + (producto.precio * producto.cantidad), 0);
+    total.innerText = `$${totalCalculado}`;
+
 }
