@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --clr-main: #4b33a8;
-    --clr-main-light: #785ce9;
+    --clr-main: #2d2c31;
+    --clr-main-light: #d7cdf8;
     --clr-white: #ececec;
     --clr-gray: #e2e2e2;
     --clr-red: #961818;
@@ -47,8 +47,10 @@ aside {
 }
 
 .logo {
-    font-weight: 400;
-    font-size: 1.3rem;
+    font-weight: 500;
+    font-size: 2.2rem;
+    text-align: center;
+    cursor: pointer;
 }
 
 .menu {
@@ -140,6 +142,9 @@ main {
 .titulo-principal {
     color: var(--clr-main);
     margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: xx-large;
 }
 
 .contenedor-productos {
@@ -171,13 +176,17 @@ main {
 
 .producto-agregar {
     border: 0;
+    margin: 1rem;
     background-color: var(--clr-white);
     color: var(--clr-main);
-    padding: .4rem;
+    padding: 0.4rem;
+    /* text-align: center; */
+    /* align-items: center; */
+    width: 19rem;
     text-transform: uppercase;
-    border-radius: 2rem;
+    border-radius: 16px;
     cursor: pointer;
-    border: 2px solid var(--clr-white);
+    border: 5px solid var(--clr-white);
     transition: background-color .2s, color .2s;
 }
 
@@ -284,6 +293,9 @@ main {
 
 .disabled {
     display: none;
+}
+.swal2-styled.swal2-confirm{
+    background-color: #2d2c31;
 }
 
 /*** MEDIA QUERIES ***/
