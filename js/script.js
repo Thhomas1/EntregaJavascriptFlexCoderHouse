@@ -297,9 +297,12 @@ let productosEnCarrito;
 
 // Aca lo que hicimos es declarar la constante para el Local Storage por medio de un if declarando que el carrito quede en vacio
 
-const productosEnCarritoLS = JSON.parse(localStorage.getItem("productos-en-carrito"));
+
+let productosEnCarritoLS = localStorage.getItem("productos-en-carrito");
+//const productosEnCarritoLS = JSON.parse(localStorage.getItem("productos-en-carrito"));
+
 if (productosEnCarritoLS) {
-     productosEnCarrito = productosEnCarritoLS;
+     productosEnCarrito = JSON.parse(productosEnCarritoLS);
      actualizarNumerito(); // SI hay productos en carrito que aparezca actualizado el numerito
 
 } else {

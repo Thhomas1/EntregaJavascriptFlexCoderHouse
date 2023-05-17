@@ -1,5 +1,6 @@
 // llamamo al localStorage
 const productosEnCarrito = JSON.parse(localStorage.getItem("productos-en-carrito"));
+productosEnCarrito = JSON.parse(productosEnCarrito);
 
 // creamos todas las constantes con sus querySelectors 
 
@@ -9,12 +10,13 @@ const contenedorCarritoAcciones = document.querySelector("#carrito-acciones");
 const contenedorCarritoComprando = document.querySelector("#carrito-comprado");
 let botonesEliminar = document.querySelectorAll(".carrito-producto-eliminar"); 
 // este let lo usamos para eliminar y agarramos el querySelectorAll para justamente poder eliminar ALL
+const botonVaciar = document.querySelector("#carrito-acciones-vaciar");
 
 
+function cargarProductosCarrito() {
+    // si hay productos en carrito los mostramos y sino mostramos el mensaje
 
-// si hay productos en carrito los mostramos y sino mostramos el mensaje
-
-if (productosEnCarrito) {
+if (productosEnCarrito && productosEnCarrito.length > 0) {
     
     contenedorCarritoVacio.classList.add("disabled");
     contenedorCarritoProductos.classList.remove("disabled");
@@ -52,9 +54,10 @@ if (productosEnCarrito) {
             `;
             // todo esto queremos que se haga un append en contenedorCarritoProductos
 
-            contenedor.append
-    });
+            contenedorCarritoProductos.append(div);
+    })
 
+    actualizarBotonesEliminar();
 
 }else{
     // esto lo hacemos ya que queremos tambien que si borramos productos que tambien esto pase 
@@ -64,7 +67,16 @@ if (productosEnCarrito) {
     contenedorCarritoAcciones.classList.add("disabled");
     contenedorCarritoComprando.classList.add("disabled");
 
+    }
+    
 }
+
+
+
+cargarProductosCarrito();
+
+
+// Creamos las distintas funcioens para eliminar del carrito y actualizar del carrito 
 
 function actualizarBotonesEliminar() {
      botonesEliminar = document.querySelectorAll(".producto-eliminar");
@@ -75,4 +87,27 @@ function actualizarBotonesEliminar() {
 }
 
 
-// ! 2:00:20
+
+function eliminarDelCarrito(){
+    const idBoton = e.currentTarget.id;
+    const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
+
+    productosEnCarrito.splice(index, 1);
+    cargarProductosCarrito();
+
+    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+
+}
+
+
+
+// le agregamos un addEventListener para llamar a la funcion de vaciar 
+
+botonVaciar.addEventListener("click", vaciarCarrito);
+
+function vaciarCarrito() {
+
+    productosEnCarrito.length = 0;
+    localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+    cargarProductosCarrito();
+}
