@@ -1,179 +1,176 @@
+
 // Javascript Entrega Final Romero Thomas
 // :D
 
+/*
+declaramos el Fetch para la llamada de los productos. Dejamos de utilizar el fetch
+y pasamos a la funcionalidad de Async Await justamente para no estar utilizando el .then a cada rato.
 
-
-// declaramos el Fetch para la llamada de los productos
-
+Por medio de la funcion asincronica y con nuestra nueva funcionalidad mucho mas moderna
+de try / catch / finally que nos permite fijar el error producido
+*/
 let productos = [];
 
-fetch("./js/productos.json")
-    .then(response => response.json())
-    .then(data => {
-        productos = data;
-        cargarProductos(productos);
-    })
+async function fetchProductos() {
+  try {
+    const response = await fetch("./js/productos.json");
+    const data = await response.json(); // para parsearlo...
+    productos = data;
+    cargarProductos(productos);
+  } catch (error) {
+    console.error("Error al obtener los productos:", error);
+  } finally {
+    console.log("Proceso de obtención de productos completado.");
+  }
+}
 
-// declaramos nuestras constantes para traer las id y las clases sin necesidad que generar tanto codigo en la estructura(HTML)
+// declaramos nuestras constantes para traer las idy las clases sin necesidad de generar tanto código en la estructura (HTML)
 
 const contenedorProductos = document.querySelector("#contenedor-productos");
 const botonesCategorias = document.querySelectorAll(".boton-categoria");
 const tituloPrincipal = document.querySelector("#titulo-principal");
 let botonesAgregar = document.querySelectorAll(".producto-agregar");
 const numerito = document.querySelector("#numerito");
+const aside = document.querySelector("aside");
 
-
-botonesCategorias.forEach(boton => boton.addEventListener("click", () => {
+botonesCategorias.forEach((boton) =>
+  boton.addEventListener("click", () => {
     aside.classList.remove("aside-visible");
-}))
-
+  })
+);
 // Creamos la funcion para que carguen dichos productos y aparezcan en el inicio
 
 function cargarProductos(productosElegidos) {
+  contenedorProductos.innerHTML = "";
 
-    contenedorProductos.innerHTML = "";
+  productosElegidos.forEach((producto) => {
+    const div = document.createElement("div");
+    div.classList.add("producto");
+    div.innerHTML = `
+        <img class="producto-imagen" src="${producto.imagen}" alt="${producto.titulo}">
+        <div class="producto-detalles">
+            <h3 class="producto-titulo">${producto.titulo}</h3>
+            <p class="producto-precio">$${producto.precio}</p>
+            <button class="producto-agregar" id="${producto.id}">Agregar</button>
+        </div>
+    `;
 
-    productosElegidos.forEach(producto => {
+    contenedorProductos.append(div);
+  });
 
-        const div = document.createElement("div");
-        div.classList.add("producto");
-        div.innerHTML = `
-            <img class="producto-imagen" src="${producto.imagen}" alt="${producto.titulo}">
-            <div class="producto-detalles">
-                <h3 class="producto-titulo">${producto.titulo}</h3>
-                <p class="producto-precio">$${producto.precio}</p>
-                <button class="producto-agregar" id="${producto.id}">Agregar</button>
-            </div>
-        `;
-        // hacemos un append de este mismo div para luego llamarlo
-
-        contenedorProductos.append(div);
-    })
-
-    // la llamamos...
-
-    actualizarBotonesAgregar();
+  actualizarBotonesAgregar();
 }
 
+// utilizamos dichas constantes anteriormente mencionadas para crear los addeventlistener y que cree la funcionalidad de los botones.
+// todo esto lo hacemos a través de un forEach y luego con un try catch para manejar el evento click en la lista de botones para las categorias
 
-// utilizamos dichas constantes anteriormente mencionadas para crear los addeventlistener y que cree la funcionalidad de los botones
-// todo esto lo hacemos a traves de un forEach
+botonesCategorias.forEach((boton) => {
+  boton.addEventListener("click", async (e) => {
+    botonesCategorias.forEach((boton) => boton.classList.remove("active")); // eliminamos la clase active de todos los botones para permitir el distinto estilo visual
+    e.currentTarget.classList.add("active"); // se agrega la clase "active" al botón en el que se hizo clic
 
-botonesCategorias.forEach(boton => {
-    boton.addEventListener("click", (e) => {
-
-        // creamos el forEach de dicho boton para habilitar la seccion en la que estamos :)
-
-        botonesCategorias.forEach(boton => boton.classList.remove("active"));
-        e.currentTarget.classList.add("active");
-
-        // creamos el if para evitar el error de la carga de productos y formalizar nuestro metodo 
-        // utilizamos el metodo filter para filtrar las distintas prendas y a traves del currentTarget traemos el id del html
-        // utilizamos el metodo find   para que recorra cada producto del array y que traiga el primer producto 
-
-
-        if (e.currentTarget.id != "todos") {
-            const productoCategoria = productos.find(producto => producto.categoria.id === e.currentTarget.id);
-            tituloPrincipal.innerText = productoCategoria.categoria.nombre;
-            const productosBoton = productos.filter(producto => producto.categoria.id === e.currentTarget.id);
-            cargarProductos(productosBoton);
-        } else {
-            // array principal que tiene todos los productos
-            tituloPrincipal.innerText = "Todos los productos";
-            cargarProductos(productos);
-        }
-
-    })
+    if (e.currentTarget.id != "todos") {
+      try {
+        const response = await fetch("./js/productos.json"); // lo mismo que arriba de todo creando la solicitud para obtener los arrays del JSON 
+        const categorias = await response.json(); // convierte la rpta...
+        const categoria = categorias.find((cat) => cat.id === e.currentTarget.id); // se busca la categoría correspondiente al id del botón en el que se hizo clic en el array de categorías obtenido anteriormente
+        tituloPrincipal.innerText = categoria.nombre; // Se actualiza el contenido...
+        const productosBoton = productos.filter(
+          (producto) => producto.categoria.id === e.currentTarget.id // Se filtran los productos para obtener solo aquellos cuya categoría coincide con el id del botón en el que se hizo clic.
+        );
+        cargarProductos(productosBoton); // Se llama a la función pasando como argumento los productos filtrados 
+      } catch (error) {
+        console.error("Error al obtener las categorías:", error);
+      }
+    } else {
+      tituloPrincipal.innerText = "Todos los productos";
+      cargarProductos(productos);
+    }
+  });
 });
 
-// como sabemos que el let declarado de botones agregar recien esta mencionado en nuestra linea 231 
-// creamos esta funcion para cuando se carguen productos nuevos tambien se actualicen los botones
-// Declaramos la funcion y utilizamos el forEach para agregar al carrito
+// creamos esta función para cuando se carguen productos nuevos también se actualicen los botones
+// Declaramos la función y utilizamos el forEach para agregar al carrito
 
 function actualizarBotonesAgregar() {
-    botonesAgregar = document.querySelectorAll(".producto-agregar");
+  botonesAgregar = document.querySelectorAll(".producto-agregar");
 
-    botonesAgregar.forEach(boton => {
-        boton.addEventListener("click", agregarAlCarrito);
-    });
+  botonesAgregar.forEach((boton) => {
+    boton.addEventListener("click", agregarAlCarrito);
+  });
 }
 
-/* 
-declaramos y utilizamos el metodo find para que nos devuelve nuevamente el producto 
- y por medio del metodo push cada vez que vayamos sumando productos al carrito aparece como arrays,
-basicamente agregamos un producto y lo "convertimos" en un array
-*/
-
+// declaramos los let...
 
 let productosEnCarrito;
 
-// Aca lo que hicimos es declarar la constante para el Local Storage por medio de un if declarando que el carrito quede en vacio
-
-
 let productosEnCarritoLS = localStorage.getItem("productos-en-carrito");
-//const productosEnCarritoLS = JSON.parse(localStorage.getItem("productos-en-carrito"));
-
 
 if (productosEnCarritoLS) {
-    productosEnCarrito = JSON.parse(productosEnCarritoLS);
-    actualizarNumerito(); // SI hay productos en carrito que aparezca actualizado el numerito
+  try {
+    productosEnCarrito = JSON.parse(productosEnCarritoLS); // y hacemos lo mismo como antes para el local storage
+    actualizarNumerito();
+  } catch (error) {
+    console.error("Error al obtener los productos del carrito:", error);
+  }
 } else {
-    productosEnCarrito = [];
+  productosEnCarrito = [];
 }
 
-function agregarAlCarrito(e) {
-    // utilizamos Toastify para las notfctions
+
+// Utilizamos la libreria por medio de una funcion asincrona justamente para no andar con el .then por todos lados y utilizamos Try catch para implementarla
+async function agregarAlCarrito(e) {
+  try { 
     Toastify({
-        text: "Se agrego al carrito",
-        duration: 3000,
-        close: true,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
-        style: {
-          background: "linear-gradient(to bottom, #2d2c31, #ececec)",
-          borderRadius: "2rem",
-          textTransform: "uppercase",
-          fontSize: ".75rem"
-        },
-        offset: {
-            x: '1.5rem', // horizontal axis - can be a number or a string indicating unity. eg: '2em'
-            y: '1.5rem' // vertical axis - can be a number or a string indicating unity. eg: '2em'
-          },
-        onClick: function(){} // Callback after click
-      }).showToast();
+      text: "Se agrego al carrito",
+      duration: 3000,
+      close: true,
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "linear-gradient(to bottom, #2d2c31, #ececec)",
+        borderRadius: "2rem",
+        textTransform: "uppercase",
+        fontSize: ".75rem",
+      },
+      offset: {
+        x: "1.5rem",
+        y: "1.5rem",
+      },
+      onClick: function () {},
+    }).showToast();
 
     const idBoton = e.currentTarget.id;
-    const productoAgregado = productos.find(producto => producto.id === idBoton);
+    const productoAgregado = productos.find((producto) => producto.id === idBoton);  //  Se busca el producto correspondiente por medio del .find y se guarda en la variable productoAgregado.
 
-    /* en este caso utilizamos el metodo some para fijarse si hay algo que coincida y devuelva a modo booleano (True o False)
-        esto lo hacemos para que en el carrito no se repita el mismo array, es decir el mismo producto
-        creandole un if subiendole la cantidad de dicho array sin necesidad que se repita 
-    */
-    
-    if(productosEnCarrito.some(producto => producto.id === idBoton)) {
-        const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
-        productosEnCarrito[index].cantidad++;  // esto lo hacemos para ir sumando la cantidad
+    if (productosEnCarrito.some((producto) => producto.id === idBoton)) { // Se verifica si el producto ya está en el carrito por medio del metodo .some. Si el producto ya está en el carrito, se ejecuta el bloque de código dentro de esta condición.
+      const index = productosEnCarrito.findIndex((producto) => producto.id === idBoton); //  Si el producto ya está en el carrito, se busca su índice dentro del array productosEnCarrito utilizando el método findIndex()
+      productosEnCarrito[index].cantidad++; // Se incrementa la cantidad del producto por medio de ++
     } else {
-        productoAgregado.cantidad = 1;
-        productosEnCarrito.push(productoAgregado); // metodo push para agg el product
+      productoAgregado.cantidad = 1;
+      productosEnCarrito.push(productoAgregado); // Se establece la cantidad del producto agregado como 1.
     }
-
+    // llamamos a la funcion de actualizar...
     actualizarNumerito();
 
-    // llamamos al localstorage
     localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+  } catch (error) {
+    console.error("Error al agregar el producto al carrito:", error);
+  }
 }
 
-
-// declaramos la funcion para hacer funcional la suma del carrito
-// Utilizamos un reduce para agarrar dicho array y declararlo a un solo valor, en este caso lo usamos para actualizar el numerito y reducir las cantidades
-
+// utilizamos dicha funcion justamente con el reduce para incrementar por medio del acumulador la cantidad del carrito :D
 
 function actualizarNumerito() {
-    let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0);
-    numerito.innerText = nuevoNumerito;
+  let nuevoNumerito = productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0);
+  numerito.innerText = nuevoNumerito;
 }
+
+(async function () {
+  await fetchProductos();
+})();
+
 
 
 /*

@@ -14,4 +14,4 @@ async function getApiValue(){
 
 getApiValue()
 
-// prueba que hizo el profesor con todo junto llamando a su vez al JSON establecido
+// prueba que hizo el profe con todo junto llamando a su vez al JSON establecido

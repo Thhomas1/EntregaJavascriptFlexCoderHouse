@@ -59,7 +59,7 @@ function cargarProductosCarrito() {
             `;
             // todo esto queremos que se haga un append en contenedorCarritoProductos
             contenedorCarritoProductos.append(div);
-        })
+        });
     
     actualizarBotonesEliminar();
     actualizarTotal();
@@ -92,6 +92,7 @@ function actualizarBotonesEliminar() {
 
 
 function eliminarDelCarrito(e) {
+    
     Toastify({
         text: "Producto eliminado",
         duration: 3000,
@@ -134,8 +135,8 @@ function vaciarCarrito() {
         html: `Se van a borrar ${productosEnCarrito.reduce((acc, producto) => acc + producto.cantidad, 0)} productos.`,
         showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No'
+        confirmButtonText: 'Sí, vaciar',
+        cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
             productosEnCarrito.length = 0;
@@ -157,8 +158,11 @@ Y hacemos el boton nuevamente como hicimos arriba
 
 
 function actualizarTotal() {
-    const totalCalculado = productosEnCarrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
-    total.innerText = `$${totalCalculado}`;
+    const totalCalculado = productosEnCarrito.reduce(
+    (acc, producto) => acc + producto.precio * producto.cantidad,
+    0
+  );
+  contenedorTotal.innerText = `$${totalCalculado}`;
 }
 
 // volvemos a utilizar el addEventListener
