@@ -179,3 +179,7 @@ function comprarCarrito() {
     contenedorCarritoComprado.classList.remove("disabled");
 
 }
+
+
+// Javascript Entrega Final Romero Thomas
+// :D

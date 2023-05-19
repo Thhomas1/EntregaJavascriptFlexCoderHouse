@@ -62,32 +62,28 @@ function cargarProductos(productosElegidos) {
 }
 
 // utilizamos dichas constantes anteriormente mencionadas para crear los addeventlistener y que cree la funcionalidad de los botones.
-// todo esto lo hacemos a través de un forEach y luego con un try catch para manejar el evento click en la lista de botones para las categorias
+// todo esto lo hacemos a través de un forEach 
 
-botonesCategorias.forEach((boton) => {
-  boton.addEventListener("click", async (e) => {
-    botonesCategorias.forEach((boton) => boton.classList.remove("active")); // eliminamos la clase active de todos los botones para permitir el distinto estilo visual
-    e.currentTarget.classList.add("active"); // se agrega la clase "active" al botón en el que se hizo clic
+botonesCategorias.forEach(boton => {
+    boton.addEventListener("click", (e) => {
 
-    if (e.currentTarget.id != "todos") {
-      try {
-        const response = await fetch("./js/productos.json"); // lo mismo que arriba de todo creando la solicitud para obtener los arrays del JSON 
-        const categorias = await response.json(); // convierte la rpta...
-        const categoria = categorias.find((cat) => cat.id === e.currentTarget.id); // se busca la categoría correspondiente al id del botón en el que se hizo clic en el array de categorías obtenido anteriormente
-        tituloPrincipal.innerText = categoria.nombre; // Se actualiza el contenido...
-        const productosBoton = productos.filter(
-          (producto) => producto.categoria.id === e.currentTarget.id // Se filtran los productos para obtener solo aquellos cuya categoría coincide con el id del botón en el que se hizo clic.
-        );
-        cargarProductos(productosBoton); // Se llama a la función pasando como argumento los productos filtrados 
-      } catch (error) {
-        console.error("Error al obtener las categorías:", error);
-      }
-    } else {
-      tituloPrincipal.innerText = "Todos los productos";
-      cargarProductos(productos);
-    }
-  });
-});
+        botonesCategorias.forEach(boton => boton.classList.remove("active"));
+        e.currentTarget.classList.add("active");
+
+        if (e.currentTarget.id != "todos") {
+            const productoCategoria = productos.find(producto => producto.categoria.id === e.currentTarget.id);
+            tituloPrincipal.innerText = productoCategoria.categoria.nombre;
+            const productosBoton = productos.filter(producto => producto.categoria.id === e.currentTarget.id);
+            cargarProductos(productosBoton);
+        } else {
+            tituloPrincipal.innerText = "Todos los productos";
+            cargarProductos(productos);
+        }
+
+    })
+}); // *Explicacion de esta parte abajo de todo!
+
+
 
 // creamos esta función para cuando se carguen productos nuevos también se actualicen los botones
 // Declaramos la función y utilizamos el forEach para agregar al carrito
@@ -173,6 +169,19 @@ function actualizarNumerito() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 Arrays
 Comentar las partes
@@ -182,15 +191,34 @@ Uso de Dom
 JSON si o si para remplazar lo que seria lo de las apis
 SweetAlert u otra libreria mas linda
 
+*/
 
-async function getApiValue{
-    Try
+/*
 
-    Catch
+! Desconozco porque pero no me andaba el try catch de esta parte, estuve varios dias y tuve que volver al if else porque para la navegacion del mismo
 
-    finally
+botonesCategorias.forEach((boton) => {
+  boton.addEventListener("click", async (e) => {
+    botonesCategorias.forEach((boton) => boton.classList.remove("active")); // eliminamos la clase active de todos los botones para permitir el distinto estilo visual
+    e.currentTarget.classList.add("active"); // se agrega la clase "active" al botón en el que se hizo clic
 
-}
-
-getApiValue()
+    if (e.currentTarget.id != "todos") {
+      try {
+        const response = await fetch("./js/productos.json"); // lo mismo que arriba de todo creando la solicitud para obtener los arrays del JSON 
+        const categorias = await response.json(); // convierte la rpta...
+        const categoria = categorias.find((cat) => cat.id === e.currentTarget.id); // se busca la categoría correspondiente al id del botón en el que se hizo clic en el array de categorías obtenido anteriormente
+        tituloPrincipal.innerText = categoria.nombre; // Se actualiza el contenido...
+        const productosBoton = productos.filter(
+          (producto) => producto.categoria.id === e.currentTarget.id // Se filtran los productos para obtener solo aquellos cuya categoría coincide con el id del botón en el que se hizo clic.
+        );
+        cargarProductos(productosBoton); // Se llama a la función pasando como argumento los productos filtrados 
+      } catch (error) {
+        console.error("Error al obtener las categorías:", error);
+      }
+    } else {
+      tituloPrincipal.innerText = "Todos los productos";
+      cargarProductos(productos);
+    }
+  });
+});
 */

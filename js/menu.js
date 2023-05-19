@@ -9,3 +9,7 @@ openMenu.addEventListener("click", () => {
 closeMenu.addEventListener("click", () => {
     aside.classList.remove("aside-visible");
 })
+
+
+// Javascript Entrega Final Romero Thomas
+// :D
