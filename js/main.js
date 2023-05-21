@@ -13,7 +13,7 @@ let productos = [];
 
 async function fetchProductos() {
   try {
-    const response = await fetch("./js/productos.json");
+    const response = await fetch("../JSON/productos.json");
     const data = await response.json(); // para parsearlo...
     productos = data;
     cargarProductos(productos);
@@ -156,6 +156,8 @@ async function agregarAlCarrito(e) {
   }
 }
 
+
+
 // utilizamos dicha funcion justamente con el reduce para incrementar por medio del acumulador la cantidad del carrito :D
 
 function actualizarNumerito() {
@@ -166,7 +168,6 @@ function actualizarNumerito() {
 (async function () {
   await fetchProductos();
 })();
-
 
 
 

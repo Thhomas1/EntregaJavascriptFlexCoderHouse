@@ -180,6 +180,5 @@ function comprarCarrito() {
 
 }
 
-
 // Javascript Entrega Final Romero Thomas
 // :D
