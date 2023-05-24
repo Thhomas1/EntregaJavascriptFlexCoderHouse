@@ -52,6 +52,11 @@ aside {
     text-align: center;
     cursor: pointer;
 }
+.compumain{
+    height: 7rem;
+    width: 7rem;
+    margin-left: 5rem;
+}
 
 .menu {
     display: flex;
